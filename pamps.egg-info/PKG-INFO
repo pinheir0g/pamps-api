@@ -1,0 +1,11 @@
+Metadata-Version: 2.1
+Name: pamps
+Version: 0.1.0
+Summary: Pamps is a social posting app
+Home-page: pamps.io
+Author: Melon Husky
+License: UNKNOWN
+Description: Pamps is a social posting app
+Platform: UNKNOWN
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown

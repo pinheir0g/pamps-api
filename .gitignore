@@ -1,0 +1,5 @@
+.secrets.toml
+.venv
+*_cache
+*__pycache__
+.idea
