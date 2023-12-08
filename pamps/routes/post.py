@@ -11,6 +11,9 @@ from pamps.models.post import (
     PostRequest,
     PostResponse,
     PostResponseWithReplies,
+    Like,
+    LikeRequest,
+    LikeResponse,
 )
 from pamps.models.user import User
 
@@ -71,3 +74,39 @@ async def create_post(
     session.commit()
     session.refresh(db_post)
     return db_post
+
+
+@router.post("/{post_id}/like/", response_model=LikeResponse, status_code=201)
+async def like_post(
+    *,
+    session: Session = ActiveSession,
+    user: User = AuthenticatedUser,
+    like: LikeRequest,
+):
+    """Likes a post"""
+    like.user = user.id
+
+    db_like = Like.from_orm(like)
+    session.add(db_like)
+    session.commit()
+    session.refresh(db_like)
+    return db_like
+
+
+@router.get("/likes/{username}", response_model=List[PostResponseWithReplies])
+async def liked_posts(
+    *,
+    session: Session = ActiveSession,
+    username: str,
+):
+    """Get all posts from user likes"""
+
+    user = session.exec(select(User).where(User.username == username)).first()
+    likes = user.user_likes
+    user_like = [like.post for like in likes]
+    posts = session.exec(select(Post).join(User).where(
+        User.id.in_(user_like),
+        Post.parent == None
+        )
+    ).all()
+    return posts

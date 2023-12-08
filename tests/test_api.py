@@ -86,3 +86,26 @@ def test_all_posts_from_user1_with_replies(api_client):
     assert response.status_code == 200
     results = response.json()
     assert len(results) == 3
+
+
+@pytest.mark.order(3)
+def test_like_on_post_1(api_client_user2):
+    response = api_client_user2.post(
+        "/post/{post_id}/like",
+        json={"post": 1}
+        )
+    assert response.status_code == 201
+    results = response.json()
+    assert results["user"] == 2
+    assert results["post"] == 1
+
+
+@pytest.mark.order(3)
+def test_all_posts_from_user2_likes(api_client):
+    response = api_client.get("/post/likes/user2")
+    
+    assert response.status_code == 200
+    results = response.json()
+    assert len(results) == 2
+    for result in results:
+        assert result["user_id"] == 1

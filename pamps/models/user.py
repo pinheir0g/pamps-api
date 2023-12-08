@@ -3,6 +3,7 @@ from sqlmodel import Field, SQLModel, Relationship
 from pamps.security import HashedPassword
 from pydantic import BaseModel, Extra
 from datetime import datetime
+from pamps.models.post import Like
 
 if TYPE_CHECKING:
     from pamps.models.post import Post
@@ -31,6 +32,7 @@ class User(SQLModel, table=True):
         }
     )
 
+    user_likes: List["Like"] = Relationship(back_populates='users')
 
 class UserResponse(BaseModel):
     """Serializer for User Response"""

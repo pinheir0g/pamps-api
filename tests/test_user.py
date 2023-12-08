@@ -5,7 +5,7 @@ def test_follow_user2(api_client_user2):
     """User2 Follows user1"""
 
     response = api_client_user2.post(
-        "/user/follow/",
+        "/user/follow/{id}",
         json={"to_user_id": 1})
     assert response.status_code == 201
 

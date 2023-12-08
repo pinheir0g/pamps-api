@@ -46,7 +46,7 @@ async def create_user(*, session: Session = ActiveSession, user: UserRequest):
     return db_user
 
 
-@router.post("/follow/", status_code=201)
+@router.post("/follow/{id}", status_code=201)
 async def follow_user(
     *, 
     session: Session = ActiveSession,
@@ -96,5 +96,7 @@ async def timeline(
     to_user = [follow.to_user_id for follow in following]
     posts = session.exec(select(Post).join(User).where(
         User.id.in_(to_user),
-        Post.parent == None)).all()
+        Post.parent == None
+        )
+    ).all()
     return posts

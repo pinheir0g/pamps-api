@@ -31,6 +31,8 @@ class Post(SQLModel, table=True):
     # This lists all children to this post
     replies: List["Post"] = Relationship(back_populates="parent")
 
+    post_likes: List["Like"] = Relationship(back_populates="posts")
+
     def __lt__(self, other):
         """This enables post.replies.sort() to sort by date"""
         return self.date < other.date
@@ -60,6 +62,36 @@ class PostRequest(BaseModel):
 
     parent_id: Optional[int]
     text: str
+
+    class Config:
+        extra = Extra.allow
+        arbitrary_types_allowed = True
+
+
+class Like(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user: Optional[int] = Field(foreign_key="user.id", nullable=False)
+    post: Optional[int] = Field(foreign_key="post.id", nullable=False)
+
+    # It populates a `.post_likes` attribute to the `Post` model
+    posts: List["Post"] = Relationship(back_populates="post_likes")
+
+    # It populates a `.user_likes` attribute to the `User` model
+    users: List["User"] = Relationship(back_populates="user_likes")
+
+
+class LikeResponse(BaseModel):
+    """Serializer for Like response"""
+
+    id: int
+    post: int
+    user: int
+    
+
+class LikeRequest(BaseModel):
+    """Serializer for Like request payload"""
+
+    post: int
 
     class Config:
         extra = Extra.allow

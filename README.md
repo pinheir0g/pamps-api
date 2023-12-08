@@ -16,6 +16,8 @@ This is a microblog project inspired by the LINUXtips training, "Creating API wi
 - General post listing (home)
 - Listing of posts from followed users (timeline)
 - Posts can be replies to other posts
+- Likes on posts
+- Listing of posts that a user has liked
 
 ## Requirements
 - Python 3.10
@@ -53,5 +55,4 @@ localhost:8000/docs
 
 - Edit posts
 - Remove posts
-- Likes on posts
 - Front-end
